@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -40,5 +41,13 @@ class AuthController
             "success" => false,
             "message" => "Invalid email or password"
         ],401);
+    }
+
+    # profile
+    public function profile(Request $request){
+        return response([
+            "success" => true,
+            "data" => auth()->user()
+        ],200);
     }
 }
