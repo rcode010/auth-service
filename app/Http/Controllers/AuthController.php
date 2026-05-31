@@ -8,6 +8,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController
@@ -48,6 +49,18 @@ class AuthController
         return response([
             "success" => true,
             "data" => auth()->user()
+        ],200);
+    }
+
+    # Logout
+    public function logout(Request $request){
+        JWTAuth::invalidate(JWTAuth::getToken());
+
+        \Cache::put('test_key', 'test_value', 60);
+
+        return response([
+            "success" => true,
+            "message" => "User logged out successfully"
         ],200);
     }
 }
