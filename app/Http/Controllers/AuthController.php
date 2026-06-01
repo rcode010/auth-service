@@ -35,7 +35,7 @@ class AuthController
         if($token){
             $user = auth()->user();
             $refreshToken = bin2hex(random_bytes(32));
-            Redis::set('refresh_token:' .$user->id, $refreshToken, 'EX', 60 * 60 * 24 * 7);
+            Redis::set('refresh_token:' . $refreshToken, $user->id, 'EX', 60 * 60 * 24 * 7);
             return response([
                 "success" => true,
                 "message" => "User logged in successfully",
@@ -66,4 +66,31 @@ class AuthController
             "message" => "User logged out successfully"
         ],200);
     }
+    # Refresh Token
+    public function refreshToken(RefreshToken $request){
+        $refreshToken = $request->refresh_token;
+        $userId = Redis::get('refresh_token:' .$refreshToken);
+        if($userId){
+            $user = User::find($userId);
+            $accessToken = JWTAuth::fromUser($user);
+            $refreshToken = bin2hex(random_bytes(32));
+            Redis::del('refresh_token:' . $request->refresh_token);
+            Redis::set('refresh_token:' . $refreshToken, $userId, 'EX', 60 * 60 * 24 * 7);
+            return response([
+                "success" => true,
+                "message" => "Refresh token successfully",
+                "accessToken"=>$accessToken,
+                "refreshToken"=>$refreshToken,
+            ]);
+        }
+        return response([
+            "success" => false,
+            "message" => "Refresh token is invalid"
+        ],401);
+
+    }
+
+
+
+
 }
