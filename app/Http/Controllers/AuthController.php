@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ProfileRequest;
+use App\Http\Requests\RefreshToken;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -30,12 +31,17 @@ class AuthController
             $request->validated();
 
         $token = JWTAuth::attempt($request->only('email','password'));
+
         if($token){
+            $user = auth()->user();
+            $refreshToken = bin2hex(random_bytes(32));
+            Redis::set('refresh_token:' .$user->id, $refreshToken, 'EX', 60 * 60 * 24 * 7);
             return response([
                 "success" => true,
                 "message" => "User logged in successfully",
                 "user"=>auth()->user(),
-                "token"=>$token
+                "accessToken"=>$token,
+                "refreshToken"=>$refreshToken
             ],200);
         }
         return response([
@@ -55,9 +61,6 @@ class AuthController
     # Logout
     public function logout(Request $request){
         JWTAuth::invalidate(JWTAuth::getToken());
-
-        \Cache::put('test_key', 'test_value', 60);
-
         return response([
             "success" => true,
             "message" => "User logged out successfully"
