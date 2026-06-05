@@ -1,0 +1,34 @@
+version: '3'
+services:
+    auth-service:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8000:8000"
+        restart: always
+        depends_on:
+            - postgres
+            - redis
+        environment:
+            DB_HOST: postgres
+            DB_PORT: 5432
+            DB_DATABASE: auth-service-db
+            DB_USERNAME: postgres
+            DB_PASSWORD: secret
+            REDIS_HOST: redis
+            REDIS_PORT: 6379
+    postgres:
+        image: postgres:16
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_DB: auth-service-db
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: secret
+
+    redis:
+        image: redis:alpine
+        ports:
+            -   "6379:6379"
+

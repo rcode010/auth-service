@@ -25,13 +25,10 @@ class AuthController
             "data"=>$user
         ],201);
     }
-
     # Login
     public function login(LoginRequest $request){
-            $request->validated();
-
+        $request->validated();
         $token = JWTAuth::attempt($request->only('email','password'));
-
         if($token){
             $user = auth()->user();
             $refreshToken = bin2hex(random_bytes(32));
@@ -49,7 +46,6 @@ class AuthController
             "message" => "Invalid email or password"
         ],401);
     }
-
     # profile
     public function profile(Request $request){
         return response([
@@ -57,7 +53,6 @@ class AuthController
             "data" => auth()->user()
         ],200);
     }
-
     # Logout
     public function logout(Request $request){
         JWTAuth::invalidate(JWTAuth::getToken());
@@ -87,10 +82,5 @@ class AuthController
             "success" => false,
             "message" => "Refresh token is invalid"
         ],401);
-
     }
-
-
-
-
 }
