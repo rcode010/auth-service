@@ -8,6 +8,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -47,5 +48,11 @@ return Application::configure(basePath: dirname(__DIR__))
                 'success' => false,
                 'message' => 'Too many attempts, Please try again later.',
             ],429);
+        });
+        $exceptions->render(function (TokenBlacklistedException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token has been blacklisted.',
+            ], 401);
         });
     })->create();
