@@ -8,5 +8,5 @@ beforeEach(function () {
 });
 
 test('Valid refresh token returns new access token and new refresh token', function () {
-    $this->postJson("/)
+    $this->postJson('/');
 });

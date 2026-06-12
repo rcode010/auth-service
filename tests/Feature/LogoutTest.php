@@ -9,17 +9,16 @@ beforeEach(function () {
 
 test('Authenticated user can logout successfully', function () {
 
-
     $this->withHeaders([
         'Authorization' => 'Bearer '.$this->token,
-    ])->postJson("/api/auth/logout")->assertStatus(200);
+    ])->postJson('/api/auth/logout')->assertStatus(200);
 
 });
 
 test('Blacklisted token can not get their profile data after logout', function () {
     $this->withHeaders([
         'Authorization' => 'Bearer '.$this->token,
-    ])->postJson("/api/auth/logout")->assertStatus(200);
+    ])->postJson('/api/auth/logout')->assertStatus(200);
 
     // Note: JWT blacklist check cannot be tested in-process due to
     // token state caching in tymon/jwt-auth. Verified manually via Postman.

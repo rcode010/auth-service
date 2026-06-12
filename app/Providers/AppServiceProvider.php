@@ -22,12 +22,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        RateLimiter::for("login", function (Request $request) {
-            return Limit::perMinute(5,15)->by($request->input('email')."|".$request->ip())->response(function () use ($request) {
+        RateLimiter::for('login', function (Request $request) {
+            return Limit::perMinute(5, 15)->by($request->input('email').'|'.$request->ip())->response(function () {
                 return response()->json([
-                    "success" => false,
-                    "message" => "Too many attempts. Please try again later.",
-                ],429);
+                    'success' => false,
+                    'message' => 'Too many attempts. Please try again later.',
+                ], 429);
             });
         });
     }

@@ -18,7 +18,8 @@ class User extends Authenticatable implements JWTSubject
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    protected $fillable = ['password','email','name'];
+    protected $fillable = ['password', 'email', 'name'];
+
     protected $hidden = ['password'];
 
     /**
@@ -26,7 +27,6 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return array<string, string>
      */
-
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -36,6 +36,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
     protected function casts(): array
     {
         return [

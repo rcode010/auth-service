@@ -24,30 +24,30 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
         );
-        $exceptions->render(function (AuthenticationException $e){
+        $exceptions->render(function (AuthenticationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthenticated.',
-            ],401);
+            ], 401);
         });
-        $exceptions->render(function (ValidationException $e){
+        $exceptions->render(function (ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed.',
                 'errors' => $e->errors(),
-            ],422);
+            ], 422);
         });
-        $exceptions->render(function (ModelNotFoundException $e){
+        $exceptions->render(function (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Resource not found.',
-            ],404);
+            ], 404);
         });
-        $exceptions->render(function (ThrottleRequestsException $e){
+        $exceptions->render(function (ThrottleRequestsException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Too many attempts, Please try again later.',
-            ],429);
+            ], 429);
         });
         $exceptions->render(function (TokenBlacklistedException $e) {
             return response()->json([

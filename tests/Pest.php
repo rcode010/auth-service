@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -43,8 +44,8 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-//pest()->browser()->inChrome();
-//pest()->browser()->timeout(5000);
+// pest()->browser()->inChrome();
+// pest()->browser()->timeout(5000);
 
 function something()
 {
